@@ -14,7 +14,6 @@ Make a file of .bin
 
 //! Before Run Install This Extension in vscode "aaron-bond.better-comments"
 
-
 //! login and signup aksing username and userpassword "backspace" is not working
 
 //#include
@@ -163,8 +162,15 @@ not_done:
     for (i = 0; i < 20; i++)
     {
         information.username[i] = getch();
-
         printf("%c", information.username[i]);
+
+        if (information.username[i] == 8)
+        {
+            i--;
+            information.username[i] = getch();
+            printf("%c", information.username[i]);
+        }
+
         if (information.username[i] == 13)
         {
             break;
@@ -177,8 +183,18 @@ not_done:
     printf("Enter password : ");
     for (i = 0; i < 20; i++)
     {
+        // information.userpassword[i] = getch();
+        // printf("*");
         information.userpassword[i] = getch();
         printf("*");
+
+        if (information.userpassword[i] == 8)
+        {
+            i--;
+            information.userpassword[i] = getch();
+            printf("*");
+        }
+
         if (information.userpassword[i] == 13)
         {
             flag = 1;
@@ -195,7 +211,10 @@ not_done:
     fprintf(user_pass, "Username: %s\n", information.username);
     fprintf(user_pass, "Userpassword: %s", information.userpassword);
 
+    fflush(user_pass);
+
     fclose(user_pass);
+
     if (flag == 1)
     {
         printf("Ragister succefull\n");
@@ -235,6 +254,14 @@ reset:
     {
         information.username[i] = getch();
         printf("%c", information.username[i]);
+
+        if (information.username[i] == 8)
+        {
+            i--;
+            information.username[i] = getch();
+            printf("%c", information.username[i]);
+        }
+
         if (information.username[i] == 13)
         {
             break;
@@ -249,6 +276,14 @@ reset:
     {
         information.userpassword[i] = getch();
         printf("*");
+
+        if (information.userpassword[i] == 8)
+        {
+            i--;
+            information.userpassword[i] = getch();
+            printf("*");
+        }
+
         if (information.userpassword[i] == 13)
         {
             break;
