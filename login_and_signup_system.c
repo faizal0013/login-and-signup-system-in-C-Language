@@ -25,7 +25,7 @@ Make a file of .bin
 #include <windows.h>
 //?dirent is used for creata dir usinf mydir
 #include <dirent.h>
-// #include <time.h>
+
 //? unistd library is used for usleep function for animination loading
 #include <unistd.h>
 
@@ -40,11 +40,6 @@ struct information_of_username_password
 {
     char username[10], userpassword[10];
 } information;
-
-//FILE
-FILE *user_pass = NULL;
-
-//!try console in output
 
 int main()
 {
@@ -64,8 +59,8 @@ int main()
         gotoxy(25, 21);
         for (int i = 0; i < 50; i++)
         {
-            printf("_");
-            // delay(100000);
+            printf("-");
+
             usleep(7000);
         }
     }
@@ -119,17 +114,14 @@ menu:
 
 void welcome_intro()
 {
-    //! IMP Note
-    // Time delay function in C
+
     gotoxy(30, 15);
     printf("***************\t Welcome \t***************");
-    // printf("\n\n\t***************\tWelcome\t***************\n");
-    // usleep(1000);
-    for (int i = 0; i < 100; i++)
     {
-        // printf("_");
-        // delay(100000);
-        usleep(1000);
+        for (int i = 0; i < 100; i++)
+        {
+            usleep(1000);
+        }
     }
 
     // getch();
@@ -149,7 +141,7 @@ void signup()
         gotoxy(20, 16);
         for (int i = 0; i < 50; i++)
         {
-            printf("_");
+            printf("-");
             // delay(100000);
             usleep(7000);
         }
@@ -204,6 +196,14 @@ not_done:
     information.userpassword[i] = '\0';
     printf("\n");
 
+    //FILE
+    FILE *user_pass;
+
+    if (user_pass == NULL)
+    {
+        printf("Did not have enough storage");
+    }
+
     mkdir("password");
 
     user_pass = fopen("password\\info.bin", "w+");
@@ -240,7 +240,7 @@ void login()
         gotoxy(25, 16);
         for (int i = 0; i < 50; i++)
         {
-            printf("_");
+            printf("-");
             // delay(100000);
             usleep(7000);
         }
@@ -291,6 +291,9 @@ reset:
     }
     information.userpassword[i] = '\0';
 
+    //FILE
+    FILE *user_pass = NULL;
+
     user_pass = fopen("password\\info.bin", "r+");
 
     for (i = 0; i <= 40; i++)
@@ -323,15 +326,26 @@ reset:
     result_of_username = strcmp(newtaker, information.username);
     result_of_password = strcmp(newtaker2, information.userpassword);
 
+    fflush(user_pass);
+
     fclose(user_pass);
 
     printf("\n");
     if (result_of_username == 0 && result_of_password == 0)
     {
-        // gotoxy(5, 15);
         printf("login succefull \n\n");
         printf("Wecome %s \n\n", newtaker);
+
+        //history of login using pre-define Mecros
+        mkdir("History");
+        user_pass = fopen("History\\history.bin", "ab+");
+        fprintf(user_pass, "Date is %s\n", __DATE__);
+        fprintf(user_pass, "Time is %s\n\n", __TIME__);
+        fflush(user_pass);
+        fclose(user_pass);
+    s1:
         printf("Press ESE to Logout\n");
+        printf("Press 1 to See Login History\n");
         choice = getch();
         switch (choice)
         {
@@ -340,7 +354,28 @@ reset:
             information.userpassword[0] = '\0';
             break;
 
+        case (49):
+            system("cls");
+            //Open history.bin from History Folder
+            user_pass = fopen("History\\history.bin", "r+");
+            {
+                char ht;
+
+                while ((ht = fgetc(user_pass)) != EOF)
+                {
+                    printf("%c", ht);
+                }
+            }
+
+            fclose(user_pass);
+            getch();
+            system("cls");
+            goto s1;
+            break;
+
         default:
+            goto s1;
+            system("cls");
             break;
         }
     }
@@ -374,24 +409,9 @@ reset:
             system("cls");
             goto r1;
         }
-
-        // goto logout;
-        printf("\n\nPress ESC TO Logout\n");
-        choice = getch();
-        switch (choice)
-        {
-        case (27):
-            information.username[0] = '\0';
-            information.userpassword[0] = '\0';
-            break;
-
-        default:
-            break;
-        }
     }
-
-    usleep(15000);
-    // getch();
+    system("cls");
+    getch();
 }
 
 void gotoxy(int x, int y)
